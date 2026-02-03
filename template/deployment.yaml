@@ -1,0 +1,47 @@
+{{- range $color := list "blue" "green" }}
+{{- if index $.Values.deployment.enabled $color }}
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ $.Values.app.name }}-{{ $color }}
+spec:
+  replicas: {{ index $.Values.replicaCount $color }}
+  selector:
+    matchLabels:
+      app: {{ $.Values.app.name }}
+      color: {{ $color }}
+  template:
+    metadata:
+      labels:
+        app: {{ $.Values.app.name }}
+        color: {{ $color }}
+    spec:
+      terminationGracePeriodSeconds: 30
+      containers:
+      - name: app
+        image: {{ index $.Values.image $color "repository" }}:{{ index $.Values.image $color "tag" }}
+        imagePullPolicy: {{ index $.Values.image $color "pullPolicy" }}
+        ports:
+        - containerPort: {{ $.Values.service.port }}
+
+{{- if $.Values.probes.readiness.enabled }}
+        readinessProbe:
+          httpGet:
+            path: {{ $.Values.probes.readiness.path }}
+            port: {{ $.Values.probes.readiness.port }}
+{{- end }}
+
+{{- if $.Values.probes.liveness.enabled }}
+        livenessProbe:
+          httpGet:
+            path: {{ $.Values.probes.readiness.path }}
+            port: {{ $.Values.probes.readiness.port }}
+{{- end }}
+
+        resources:
+{{ toYaml (index $.Values.resources $color) | indent 10 }}
+
+---
+{{- end }}
+{{- end }}

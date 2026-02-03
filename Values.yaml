@@ -7,7 +7,7 @@ deployment:
     green: true
 
 replicaCount:
-  blue: 2
+  blue: 3
   green: 2
 
 traffic:

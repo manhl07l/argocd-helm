@@ -35,12 +35,9 @@ spec:
 {{- if $.Values.probes.liveness.enabled }}
         livenessProbe:
           httpGet:
-            path: {{ $.Values.probes.readiness.path }}
-            port: {{ $.Values.probes.readiness.port }}
+            path: {{ $.Values.probes.liveness.path }}
+            port: {{ $.Values.probes.liveness.port }}
 {{- end }}
-
-        resources:
-{{ toYaml (index $.Values.resources $color) | indent 10 }}
 
 ---
 {{- end }}

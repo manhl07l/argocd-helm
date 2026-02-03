@@ -1,12 +1,17 @@
 app:
-  name: myapp
+  name: app
 
-traffic:
-  activeColor: blue        # blue | green
+deployment:
+  enabled:
+    blue: true
+    green: true
 
 replicaCount:
-  blue: 3
+  blue: 2
   green: 2
+
+traffic:
+  activeColor: blue   # blue | green
 
 image:
   blue:
@@ -18,35 +23,6 @@ image:
     tag: "1.26"
     pullPolicy: IfNotPresent
 
-deployment:
-  enabled:
-    blue: true
-    green: true
-
-resources:
-  blue:
-    requests:
-      cpu: 100m
-      memory: 128Mi
-    limits:
-      cpu: 300m
-      memory: 256Mi
-  green:
-    requests:
-      cpu: 100m
-      memory: 128Mi
-    limits:
-      cpu: 300m
-      memory: 256Mi
-
-probes:
-  readiness:
-    enabled: true
-    path: /
-    port: 80
-  liveness:
-    enabled: false
-
 service:
   port: 80
   targetPort: 80
@@ -56,3 +32,13 @@ ingress:
   className: nginx
   host: hello.example.local
   path: /
+
+probes:
+  readiness:
+    enabled: true
+    path: /
+    port: 80
+  liveness:
+    enabled: false
+    path: /
+    port: 80

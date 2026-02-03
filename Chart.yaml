@@ -1,0 +1,7 @@
+apiVersion: v2
+name: bluegreen-app
+description: Blue-Green deployment with Argo CD and Helm
+type: application
+
+version: 0.1.0          # version của chart
+appVersion: "1.0.0"     # version logical của app (optional)
